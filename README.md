@@ -9,3 +9,7 @@ To obtain a job as Marketing Manager. Coming with three years of digital media e
 
 https://www.linkedin.com/in/erin-hopkins-91b390181/
 https://erin-hopkins.com/
+
+## Conflicts
+
+This sections represents code on the server that isn't on the local repository. 
