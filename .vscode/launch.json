@@ -7,6 +7,15 @@
 	{
 		"type": "node",
 		"request": "launch",
+		"name": "Launch W8A Demo",
+		"program": "${workspaceFolder}/demo/w8a/index.js",
+		"skipFiles": [
+			"<node_internals>/**"
+		]
+	},
+	{
+		"type": "node",
+		"request": "launch",
 		"name": "Launch Program",
 		"program": "${workspaceFolder}/ice/w2a/node_index.js",
 		"skipFiles": [
