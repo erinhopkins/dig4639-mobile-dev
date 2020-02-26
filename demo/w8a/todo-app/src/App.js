@@ -15,15 +15,15 @@ class TodoList extends React.Component {
 		super(props)
 		 this.state = {
 			 todoList,
-			 hideCompletedItems:false
+			 hideCompletedItems:false,
 		 }
 		 this.currentId = 4;
 	}
 
 	addTask(e) {
-		console.log(this.refs.taskContent.value)
+		console.log(this.refs.taskContent)
 		let todoList = this.state.todoList
-		todoList.push (
+		todoList.push(
 			{ "id": this.currentId, "completed": true, "priority": 1, "content": this.refs.taskContent.value })
 		this.currentId++
 		this.setState({todoList})
@@ -48,8 +48,8 @@ class TodoList extends React.Component {
 			<label htmlFor="hideCompletedItems"> I have a bike</label><br></br>
 			{
 				((this.state.hideCompletedItems) ? this.state.todoList
-					.filter((v) => !v.completed): this.state.todoList)
-					.map((v) => <TodoItem id={v.id} removeTask={(id) => this.removeTask=(id)}
+					.filter((v) => !v.completed) : this.state.todoList)
+					.map((v) => <TodoItem id={v.id} removeTask={(id) => this.removeTask(id)}
 					key={v.id} content={v.content}
 					priority={v.priority}
 					completed={v.completed} />)}
