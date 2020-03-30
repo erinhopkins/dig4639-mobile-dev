@@ -9,7 +9,6 @@ To obtain a job as Marketing Manager. Coming with three years of digital media e
 
 https://erin-hopkins.com/
 
-
 ## Merging
 - Item 1 [Google](http://google.com)
 - Item 2
