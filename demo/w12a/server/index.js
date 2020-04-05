@@ -6,17 +6,6 @@ const fetch = require("node-fetch");
 const cors = require('cors')
 const app = express()
 const port = 3001
-<<<<<<< HEAD
-const simpleJson = {a: 10,
-	b:"Hello DIG4639!",
-	list: [
-		{title: "Tonight",
-		content: "Watching Netflix"},
-		{title: "Tomorrow",
-		content: "Completing Homework"}
-	]
-}
-=======
 /* Step 2
 const simpleJson = {a: 10, 
   b: "Hello DIG4639!", 
@@ -29,7 +18,6 @@ const simpleJson = {a: 10,
 } 
 */
 const helloWorld = "Hello World"
->>>>>>> 85308e767b6d679b23adec243374a9d10fde4199
 
 app.use(cors())
 app.get('/', async (req, res) => {
