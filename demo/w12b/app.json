@@ -1,9 +1,7 @@
 {
   "expo": {
-    "name": "Blank Template",
+    "name": "w12b",
     "slug": "w12b",
-    "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
