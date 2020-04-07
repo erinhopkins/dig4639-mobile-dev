@@ -6,14 +6,14 @@ import questions from './questions.json'
 const TIME_LIMIT = 5
 const TITLE_STATE = 0
 const QUESTION_STATE = 1
-const FINAL_STATE = 2
+// const FINAL_STATE = 2
 
 class QuizQuestion extends React.Component {
 	// state={}
   render() {
     return (
 		<View style={styles.container}>
-			<Text style={styles.question}>{this.props.question}</Text>
+			<Text style={styles.text}>{this.props.question}</Text>
 			{this.props.answers.map((v, i) =>
 			<Button title={v.text} buttonStyle={styles.button} onPress={() => this.props.nextQuestion(v.correct)} key={i} ></Button>)}
 		</View>
@@ -27,7 +27,7 @@ class TitlePage extends React.Component {
     super(props);
     this.state = {
 			score: 0,
-      titleText: "Welcome to our quiz!",
+      titleText: "Trivia Quiz",
 			counter: 0,
 			currentState: TITLE_STATE,
 			currentQuestion: 0
@@ -87,7 +87,7 @@ class TitlePage extends React.Component {
 				<Text style={styles.timer}>{this.timeLimit - this.state.counter}</Text>
 				{((this.state.currentState === TITLE_STATE) ?
 				<>
-				<Text>{this.state.titleText}</Text>
+				<Text style={styles.text}>{this.state.titleText}</Text>
 				<Button buttonStyle={styles.button} title="Start" onPress={()=>this.start()}></Button>
 				</>
 				:
@@ -115,13 +115,21 @@ const styles = StyleSheet.create({
 		backgroundColor: '#b2eee6',
   },
 
-	score: {
-		margin: 5
+	text: {
+		margin: 5,
+		fontSize: 25
 	},
 
 	timer: {
 		color: "#F97170",
-		padding: 5
+		margin: 5,
+		fontSize: 20
+	},
+
+	score: {
+		color: "#385A7C",
+		margin: 5,
+		fontSize: 15
 	},
 
   button: {

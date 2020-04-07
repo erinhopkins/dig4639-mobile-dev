@@ -1,94 +1,110 @@
 [
   {
-    "question": "What goes up but must come down?",
+    "question": "What year was the very first model of the iPhone released?",
     "possibleAnswers":
     [
       {
-        "text":"CORONA",
+        "text":"2007",
         "correct":true
       },
       {
-        "text": "Apples",
+        "text": "2004",
         "correct":false
       },
       {
-        "text": "Gravity",
+        "text": "2005",
         "correct":false
       },
       {
-        "text": "Feelings",
+        "text": "2001",
         "correct": false
       }
     ]
   },
   {
-    "question": "Beep?",
+    "question": "Which country produces the most coffee in the world?",
     "possibleAnswers":
     [
       {
-        "text":"Boop",
+        "text":"Peru",
+        "correct":false
+      },
+      {
+        "text": "Brazil",
         "correct":true
       },
       {
-        "text": "Moo",
+        "text": "Cuba",
         "correct":false
       },
       {
-        "text": "Meep",
-        "correct":false
-      },
-      {
-        "text": "Bop",
+        "text": "Columbia",
         "correct": false
       }
     ]
   },
   {
-    "question": "In JavaScript, the keyword class is used to define an object.",
+    "question": "Which bone are babies born without?",
     "possibleAnswers":
     [
       {
-        "text":"True",
+        "text":"Backbone",
+        "correct":false
+      },
+      {
+        "text": "Knuckles",
+        "correct":false
+      },
+			{
+        "text": "Knee cap",
         "correct":true
       },
       {
-        "text": "False",
-        "correct":false
+        "text": "Tailbone",
+        "correct": false
       }
     ]
   },
   {
-    "question": "Which one of these is an example of an arrow function in Javascript?",
+    "question": "What name is used to refer to a group of frogs?",
     "possibleAnswers":
     [
       {
-        "text":"function() {}",
-        "correct":false
-      },
-      {
-        "text": "function()",
-        "correct":false
-      },
-      {
-        "text": "() => {}",
+        "text":"An army",
         "correct":true
+      },
+      {
+        "text": "A murder",
+        "correct":false
+      },
+      {
+        "text": "A squad",
+        "correct":false
+      },
+      {
+        "text": "A pond",
+        "correct":false
       }
     ]
   },
 	{
-    "question": "Who am I?",
+    "question": "Which mammal has no vocal cords?",
     "possibleAnswers":
     [
       {
-        "text":"idk",
+        "text":"Whale",
         "correct":false
       },
       {
-        "text": "who knows",
+        "text": "Lamb",
         "correct":false
       },
       {
-        "text": "undefined",
+        "text": "Zebra",
+        "correct":false
+      },
+      {
+        "text": "Giraffe",
         "correct":true
       }
     ]
