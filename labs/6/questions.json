@@ -1,22 +1,22 @@
 [
   {
-    "question": "What is the most popular programming language in the world?",
+    "question": "What goes up but must come down?",
     "possibleAnswers":
     [
       {
-        "text":"JavaScript",
+        "text":"CORONA",
         "correct":true
       },
       {
-        "text": "C++",
+        "text": "Apples",
         "correct":false
       },
       {
-        "text": "Python",
+        "text": "Gravity",
         "correct":false
       },
       {
-        "text": "Go",
+        "text": "Feelings",
         "correct": false
       }
     ]
@@ -58,7 +58,7 @@
     ]
   },
   {
-    "question": "Which one of these is an example of an arrrow function in Javascript?",
+    "question": "Which one of these is an example of an arrow function in Javascript?",
     "possibleAnswers":
     [
       {
@@ -76,19 +76,19 @@
     ]
   },
 	{
-    "question": "Which one of these is an example of an arrrow function in Javascript?",
+    "question": "Who am I?",
     "possibleAnswers":
     [
       {
-        "text":"function() {}",
+        "text":"idk",
         "correct":false
       },
       {
-        "text": "function()",
+        "text": "who knows",
         "correct":false
       },
       {
-        "text": "() => {}",
+        "text": "undefined",
         "correct":true
       }
     ]

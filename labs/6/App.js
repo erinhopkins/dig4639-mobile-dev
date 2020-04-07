@@ -1,136 +1,132 @@
-import React from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View }  from 'react-native';
+import { Button }  from 'react-native-elements';
 import questions from './questions.json'
 
-// Quiz Question
+const TIME_LIMIT = 5
+const TITLE_STATE = 0
+const QUESTION_STATE = 1
+const FINAL_STATE = 2
+
 class QuizQuestion extends React.Component {
-	render() {
-		return (
-			<View>
-				<Text>{this.props.question + 1}</Text>
-				<Text>{ questions[this.props.question].question }</Text>
-				{ questions[this.props.question].possibleAnswers.map( ( answer, index ) => ( <Button title={answer.text} buttonStyle={styles.button} onPress={() => this.props.callback( answer.correct )} key={index}></Button> ) )}
-			</View>
+	// state={}
+  render() {
+    return (
+		<View style={styles.container}>
+			<Text style={styles.question}>{this.props.question}</Text>
+			{this.props.answers.map((v, i) =>
+			<Button title={v.text} buttonStyle={styles.button} onPress={() => this.props.nextQuestion(v.correct)} key={i} ></Button>)}
+		</View>
 		)
-	}
+  }
 }
 
-export default class App extends React.Component {
+// Use parenthesis around return elements in order to include more than
+class TitlePage extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      currentQuestion: 0,
 			score: 0,
-			started: false,
-			previousQuestion: {
-				correct: null
-			},
-			showResult: false,
-			complete: false
+      titleText: "Welcome to our quiz!",
+			counter: 0,
+			currentState: TITLE_STATE,
+			currentQuestion: 0
     }
-		this.nextQuestion = this.nextQuestion.bind(this);
+  	this.timeLimit = TIME_LIMIT;
   }
 
-	// Start Quiz Method
-	startQuiz() {
-		this.setState({
-			started: true
-		});
-	}
-
-	// Move To Next Question
-	async nextQuestion( correct ) {
-		this.setState({
-			previousQuestion: {
-				correct
-			},
-			showResult: true
-		})
-
-		await new Promise( resolve => setTimeout( resolve, 1000) );
-
-		const currentQuestion = this.state.currentQuestion + 1;
-
-		this.setState({
-			score: correct ? this.state.score + 1 : this.state.score,
-			currentQuestion,
-			showResult: false,
-			complete: ( currentQuestion === questions.length ) ? true : false
-		});
-
-
-	}
-
-	// Show Results After Each Question
-	showQuestionResult() {
-		return this.state.previousQuestion.correct ?
-		// If Correct
-			(<View><Text>Correct!</Text></View>):
-
-		// If Wrong
-			(
-				<View><Text>Wrong!</Text></View>
-			)
-	}
-
-
-	// Final Quiz Resultsxdz
-	showQuizResults() {
-		return (
-			<View>
-				<Text>Congratulations</Text>
-				<Text>You Got {this.state.score} / {questions.length} Correct</Text>
-			</View>
-		)
-	}
-
-
-	// App Load Page
-	startPage() {
-		return (
-			<View containerStyle={styles.container}>
-				<Text style={styles.text}>Start the Quiz</Text>
-				<Button title="Start" style={styles.buttonStyle} onPress={() => this.startQuiz()}></Button>
-			</View>
-		)
-	}
-
-  render () {
-    if ( !this.state.started ) {
-			return this.startPage();
+  nextQuestion(correct) {
+		console.log("BUTTON PRESSED")
+		if(correct) {
+			this.setState({score: this.state.score + 1})
 		}
-
-		else if ( this.state.complete ) {
-			return this.showQuizResults();
-		}
-
-		else if ( this.state.showResult ) {
-			return this.showQuestionResult();
-		}
-
-		else {
-
-			return (
-				<QuizQuestion question={this.state.currentQuestion} callback={this.nextQuestion}></QuizQuestion>
-			)
-		}
+		if(this.state.currentQuestion == questions.length - 1) {
+			console.log("DONE")
+		} else {
+    clearInterval(this.timer)
+		console.log(this.state.currentQuestion)
+    this.setState({
+      titleText: "You answered X",
+      currentState: QUESTION_STATE,
+			currentQuestion: this.state.currentQuestion + 1
+    })
   }
 }
+  countdown() {
+    console.log("Handling interval")
+    console.log(this.state.counter)
+    if(this.state.counter < this.timeLimit) {
+      this.setState({
+        titleText: 'Starting the Quiz',
+        counter: this.state.counter + 1
+      })
+    } else {
+      this.setState({
+        titleText: "Beginning Quiz!",
+        currentState: QUESTION_STATE,
+        counter: 0
+      })
+    if(this.state.currentState == TITLE_STATE) {
+				this.timer = setInterval(() => this.countdown(), 1000)
+				clearInterval(this.timer)
+			} else {
+				this.setState({titleText: "You answered!"})
+			}
+		}
+}
+
+  start() {
+    console.log("Starting!")
+    this.setState({titleText: "Starting the Quiz!", counter: 0})
+    this.timer = setInterval(() => this.countdown(), 1000)
+}
+
+  render() {
+    return (
+      <View style={styles.container}>
+				<Text style={styles.timer}>{this.timeLimit - this.state.counter}</Text>
+				{((this.state.currentState === TITLE_STATE) ?
+				<>
+				<Text>{this.state.titleText}</Text>
+				<Button buttonStyle={styles.button} title="Start" onPress={()=>this.start()}></Button>
+				</>
+				:
+				<QuizQuestion answers={questions[this.state.currentQuestion].possibleAnswers} question={questions[this.state.currentQuestion].question} nextQuestion={(correct) => this.nextQuestion(correct)}></QuizQuestion>)}
+				<Text style={styles.score}>Score: {this.state.score}</Text>
+      </View>)
+  }
+}
+
+function App() {
+  return(
+    <View style={styles.container}>
+      <TitlePage></TitlePage>
+    </View>
+  );
+}
+
+export default App;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-		width: 400,
-		backgroundColor: "red"
+    alignItems: 'center',
+    justifyContent: 'center',
+		backgroundColor: '#b2eee6',
   },
 
-	text: {
-		textAlign: "center"
+	score: {
+		margin: 5
 	},
 
-	buttonStyles: {
-		color: "#90d9cb"
+	timer: {
+		color: "#F97170",
+		padding: 5
+	},
+
+  button: {
+		width: 100,
+		backgroundColor: "#385A7C",
+		margin: 5
 	}
-
-
-})
+});
