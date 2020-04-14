@@ -1,10 +1,11 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Card, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { trackPromise, usePromiseTracker } from "react-promise-tracker";
 import { MonoText } from '../components/StyledText';
+
 
 //API parameters
 const HEADERS = {
@@ -15,65 +16,74 @@ const HEADERS = {
 		"Accept": "application/json"
 	}
 }
-// Functional component
-// export default function HomeScreen() {
-// 	const callApi = React.useCallback(() => {
+// Functional component (cannot use state)
+export default function HomeScreen() {
+	const [contacts, setContacts] = React.useState([]);
+	const { promiseInProgress } = usePromiseTracker();
+	const callApi = React.useCallback(() => {
+		fetch('http://plato.mrl.ai:8080/', HEADERS)
+			.then(response => response.json())
+			.then(body => console.log(body))
+	}, [])
+React.useEffect(() => {
+	console.log("Effect has run")
+	trackPromise(fetch('http://plato.mrl.ai:8080/contacts', HEADERS)
+		.then(response => response.json())
+		.then(body => setContacts(body.contacts)))
+}, [])
+  return (
+    <View style={styles.container}>
+			<Button
+				buttonStyle={styles.button}
+				onPress={callApi}
+  			title="Call the API"
+  			accessibilityLabel="Calls the remote API for contacts">
+			</Button>
+
+			{ (promiseInProgress) ?
+				<ActivityIndicator size="large" color="90d9cb"/>
+				: contacts.map((contact, i) => <Card key={i} title={contact.name}/>)
+			}
+    </View>
+  );
+}
+
+// Class component
+// export default class HomeScreen extends React.Component {
+// 	state = {
+// 		contacts:[]
+// 	}
+// 	callApi =  () => {
 // 		fetch('http://plato.mrl.ai:8080/', HEADERS)
 // 			.then(response => response.json())
 // 			.then(body => console.log(body))
-// 	}, [])
-// React.useEffect(() => {
-// 	console.log("Effect has run")
-// })
-//   return (
+// 	}
+
+// 	componentDidMount() {
+// 		console.log("Effect has run")
+// 		trackPromise(fetch('http://plato.mrl.ai:8080/contacts', HEADERS)
+// 			.then(response => response.json())
+// 			.then(body => this.setState({contacts:body.contacts})))
+// 	}
+
+// 	render () {
+// 		return(
 //     <View style={styles.container}>
 // 			<Button
-// 				onPress={callApi}
+// 				onPress={this.callApi}
 //   			title="Call the API"
 //   			color="#841584"
 //   			accessibilityLabel="Calls the remote API for contacts"
 // 			/>
+
+// 			{ (promiseInProgress) ?
+// 				<ActivityIndicator size="large" color="90d9cb"/>
+// 				: this.state.contacts.map((contact, i) => <Card key={i} title={contact.name}/>)
+// 			}
 //     </View>
-//   );
+//   	);
+// 	}
 // }
-
-// Class component
-export default class HomeScreen extends React.Component {
-	state = {
-		contacts:[]
-	}
-	callApi =  () => {
-		fetch('http://plato.mrl.ai:8080/', HEADERS)
-			.then(response => response.json())
-			.then(body => console.log(body))
-	}
-
-	componentDidMount() {
-		console.log("Effect has run")
-		fetch('http://plato.mrl.ai:8080/contacts', HEADERS)
-			.then(response => response.json())
-			.then(body => this.setState({contacts:body.contacts}))
-	}
-
-	render () {
-		return(
-    <View style={styles.container}>
-			<Button
-				onPress={this.callApi}
-  			title="Call the API"
-  			color="#841584"
-  			accessibilityLabel="Calls the remote API for contacts"
-			/>
-
-			{
-				this.state.contacts.map((contact, i) => <Text key={i}>{contact.name}</Text>)
-			}
-    </View>
-  	);
-	}
-}
-
-
 
 
 HomeScreen.navigationOptions = {
@@ -113,11 +123,20 @@ function handleHelpPress() {
   );
 }
 
+
+// STYLES
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
+
+	button: {
+  	width: 100,
+		backgroundColor: "#385A7C",
+		margin: 5
+	},
+
   developmentModeText: {
     marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
