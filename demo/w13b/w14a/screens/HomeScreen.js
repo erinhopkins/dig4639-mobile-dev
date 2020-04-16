@@ -1,70 +1,80 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Button, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CheckBox } from 'react-native-elements'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
+import { Card } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
-  state = {todoList:[]}
-
-  componentDidMount() {
-    fetch('http://plato.mrl.ai:8080/todo', {
-        headers: {
-          "API":"murray"
-        }
-    })
-      .then(res => res.json())
-      .then(body => {
-        console.log(body)
-        this.setState({todoList:body.todo})
-      })
-  }
-
-  // Implement completing the task on the server
-  completeTask(position, state) {
-    fetch('http://plato.mrl.ai:8080/todo/setState', {
-      method: "POST",
-      headers: {
-        "API":"murray",
-        "Content-Type": "application/json",
-        "Accept":"application/json"
-      },
-      body: JSON.stringify({position:position, status:true})
-    })
-      .then(res => res.json())
-      .then(body => {
-        console.log(body)
-        if(body.updated != undefined) {
-          const currentList = [...this.state.todoList]
-          currentList[position].completed = state
-          this.setState({todoList: currentList})
-        }
-        // this.setState({todoList:body.todo})
-      })
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>Todo items:</Text>
-        {this.state.todoList.map((item, index) =>
-          <View key={index} style={styles.todoView}>
-           <CheckBox
-            checked={item.completed}
-            onPress={() => this.completeTask(index, !item.completed)}
-          />
-            <Text>{index}: {item.text} {item.completed ? "COMPLETED" : ""}
-            </Text>
-          </View>
-        )}
-      </ScrollView>
-    </View>
-    );
-  }
+//API parameters
+const HEADERS = {
+	"method": "GET",
+	"headers": {
+		"api": "hopkins",
+		"Content-Type": "application/json",
+		"Accept": "application/json"
+	}
 }
+// Functional component
+// export default function HomeScreen() {
+// 	const callApi = React.useCallback(() => {
+// 		fetch('http://plato.mrl.ai:8080/', HEADERS)
+// 			.then(response => response.json())
+// 			.then(body => console.log(body))
+// 	}, [])
+// React.useEffect(() => {
+// 	console.log("Effect has run")
+// })
+//   return (
+//     <View style={styles.container}>
+// 			<Button
+// 				onPress={callApi}
+//   			title="Call the API"
+//   			color="#841584"
+//   			accessibilityLabel="Calls the remote API for contacts"
+// 			/>
+//     </View>
+//   );
+// }
+
+// Class component
+export default class HomeScreen extends React.Component {
+	state = {
+		contacts:[]
+	}
+	callApi =  () => {
+		fetch('http://plato.mrl.ai:8080/', HEADERS)
+			.then(response => response.json())
+			.then(body => console.log(body))
+	}
+
+	componentDidMount() {
+		console.log("Effect has run")
+		fetch('http://plato.mrl.ai:8080/contacts', HEADERS)
+			.then(response => response.json())
+			.then(body => this.setState({contacts:body.contacts}))
+	}
+
+	render () {
+		return(
+    <View style={styles.container}>
+			<Button
+				onPress={this.callApi}
+  			title="Call the API"
+  			color="#841584"
+  			accessibilityLabel="Calls the remote API for contacts"
+			/>
+
+			{
+				this.state.contacts.map((contact, i) => <Text key={i}>{contact.name}</Text>)
+			}
+    </View>
+  	);
+	}
+}
+
+
+
 
 HomeScreen.navigationOptions = {
   header: null,
@@ -104,11 +114,6 @@ function handleHelpPress() {
 }
 
 const styles = StyleSheet.create({
-  todoView: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
   container: {
     flex: 1,
     backgroundColor: '#fff',

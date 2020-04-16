@@ -16,10 +16,10 @@ class CardList extends React.Component {
 
 // Pass a click listener function so that each card can remove themselves.
 removeCard(id) {
-	console.log("clicked myself" + id)
-	console.log(this.state.cards)
+	// console.log("clicked myself" + id)
+	// console.log(this.state.cards)
 	let cards = this.state.cards.filter((v) => v.id !== id)
-	console.log(cards)
+	// console.log(cards)
 	this.setState({cards: cards});
 }
 
