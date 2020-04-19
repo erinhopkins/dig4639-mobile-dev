@@ -1,69 +1,55 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Button, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { CheckBox } from 'react-native-elements'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
-  state = {todoList:[]}
-
-  componentDidMount() {
-    fetch('http://plato.mrl.ai:8080/todo', {
-        headers: {
-          "API":"murray"
-        }
-    })
-      .then(res => res.json())
-      .then(body => {
-        console.log(body)
-        this.setState({todoList:body.todo})
-      })
-  }
-
-  // Implement completing the task on the server
-  completeTask(position, state) {
-    fetch('http://plato.mrl.ai:8080/todo/setState', {
-      method: "POST",
-      headers: {
-        "API":"murray",
-        "Content-Type": "application/json",
-        "Accept":"application/json"
-      },
-      body: JSON.stringify({position:position, status:true})
-    })
-      .then(res => res.json())
-      .then(body => {
-        console.log(body)
-        if(body.updated != undefined) {
-          const currentList = [...this.state.todoList]
-          currentList[position].completed = state
-          this.setState({todoList: currentList})
-        }
-        // this.setState({todoList:body.todo})
-      })
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
+export default function HomeScreen() {
+  return (
+    <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>Todo items:</Text>
-        {this.state.todoList.map((item, index) =>
-          <View key={index} style={styles.todoView}>
-           <CheckBox
-            checked={item.completed}
-            onPress={() => this.completeTask(index, !item.completed)}
+        <View style={styles.welcomeContainer}>
+          <Image
+            source={
+              __DEV__
+                ? require('../assets/images/robot-dev.png')
+                : require('../assets/images/robot-prod.png')
+            }
+            style={styles.welcomeImage}
           />
-            <Text>{index}: {item.text} {item.completed ? "COMPLETED" : ""}
-            </Text>
+        </View>
+
+        <View style={styles.getStartedContainer}>
+          <DevelopmentModeNotice />
+
+          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
+
+          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+            <MonoText>screens/HomeScreen.js</MonoText>
           </View>
-        )}
+
+          <Text style={styles.getStartedText}>
+            Change any of the text, save the file, and your app will automatically reload.
+          </Text>
+        </View>
+
+        <View style={styles.helpContainer}>
+          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
+            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+
+      <View style={styles.tabBarInfoContainer}>
+        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
+
+        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
+          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+        </View>
+      </View>
     </View>
-    );
-  }
+  );
 }
 
 HomeScreen.navigationOptions = {
@@ -104,11 +90,6 @@ function handleHelpPress() {
 }
 
 const styles = StyleSheet.create({
-  todoView: {
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
