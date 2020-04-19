@@ -1,66 +1,92 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { CheckBox}  from 'react-native-elements';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Card, Button, Input, Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-
 import { MonoText } from '../components/StyledText';
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
 
-export default class HomeScreen extends React.Component {
-	state ={todoList:[]}
-	componentDidMount() {
-		fetch('http://plato.mrl.ai:8080/todo', {
-			headers: {
-				"API": "hopkins"
-			}
-		})
-		.then(res => res.json())
-		.then(body => {
-			console.log (body)
-			this.setState({todoList:body.todo})
-		})
+//Header
+const HEADERS = {
+	"method": "GET",
+	"headers": {
+		"API": "hopkins",
+		"Content-Type": "application/json",
+		"Accept": "application/json"
 	}
+}
 
-	completeTask(position, state) {
-		//Implement completing the task on the server
-		fetch('http://plato.mrl.ai:8080/todo/setState', {
-			method: "POST",
-			headers: {
-				"API": "hopkins",
-				"Content-Type": "application/json",
-				"Accept": "application/json"
-			},
-			body: JSON.stringify({position:position, status:true})
-		})
-		.then(res => res.json())
-		.then(body => {
-			console.log (body)
-			if(body.updated != undefined) {
-				const currentList = [...this.state.todoList]
-				currentList[position].completed = state
-				this.setState({todoList: currentList})
-			}
-			// this.setState({todoList:body.todo})
-		})
-	}
+export default function HomeScreen() {
+	const { promiseInProgress } = usePromiseTracker();
+	const [contacts, setContacts] = React.useState([])
 
-  render() {
-		return (
-			<View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>To Do</Text>
-				{this.state.todoList.map((item, index) =>
-				<View key={index} style={styles.todoView}>
-						<CheckBox
-            		checked={item.completed}
-            		onPress={() => this.completeTask(index, !item.completed)}/>
-					<Text>{index} : {item.text} {item.completed ? "COMPLETED" : ""}</Text>
-				</View>
-				)}
-      </ScrollView>
+	// ADD user
+	const addUser = React.useCallback(() => {
+		let newHeaders = {...HEADERS,
+			"method": "POST",
+			body: JSON.stringify({
+				name: "May Be",
+				number: "122-121-1212"
+			})}
+		fetch('http://plato.mrl.ai:8080/contacts/add', newHeaders)
+			.then(response => response.json())
+			.then(body => console.log(body))
+	}	, [])
+
+	// REMOVE user
+	const removeUser = React.useCallback(() => {
+		let newHeaders = {...HEADERS,
+			"method": "POST",
+			body: JSON.stringify({
+				position: 1
+			})}
+		fetch('http://plato.mrl.ai:8080/contacts/remove', newHeaders)
+			.then(response => response.json())
+			.then(body => console.log(body))
+	}	, [])
+
+	// PROFILE
+	const userProfile = React.useCallback(() => {
+		let newHeaders = {...HEADERS,
+			body: ({
+				name: "",
+				number: ""
+			})}
+		fetch('http://plato.mrl.ai:8080/contacts/profile', HEADERS)
+			.then(response => response.json())
+			.then(body => console.log(body))
+	}	, [])
+
+	React.useEffect(() => {
+		console.log("Use effect")
+		trackPromise(fetch('http://plato.mrl.ai:8080/contacts', HEADERS)
+			.then(response => response.json())
+			.then(body => setContacts(body.contacts)))
+}, [])
+  return (
+    <View style={styles.container}>
+			<ScrollView>
+				<Text>Contacts</Text>
+				{contacts.map((contact, i) =>
+				<Text>{contacts.name}</Text>)}
+				<Input placeholder="Name"></Input>
+				<Input placeholder="Number"></Input>
+				<Button buttonStyle={styles.button} title="Add User" onPress={addUser}></Button>
+
+				{ promiseInProgress ?
+					<ActivityIndicator></ActivityIndicator>
+				: //else
+					contacts.map((contact, i) =>
+					<Card key={i}>
+						<Icon name='delete' type='material' onPress={removeUser}></Icon>
+						<Text>{contact.name}</Text>
+						<Text>{contact.number}</Text>
+					</Card>
+				)
+				}
+			</ScrollView>
     </View>
-  	);
-	}
+  );
 }
 
 HomeScreen.navigationOptions = {
@@ -103,11 +129,6 @@ function handleHelpPress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-	todoView: {
-    flex: 1,
-		flexDirection: 'row',
     backgroundColor: '#fff',
   },
   developmentModeText: {
@@ -193,3 +214,4 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
+
