@@ -16,7 +16,7 @@ const HEADERS = {
 	}
 }
 
-export default function HomeScreen() {
+export default function ContactsScreen() {
 	const { promiseInProgress } = usePromiseTracker();
 	const [contacts, setContacts] = React.useState([])
 
@@ -89,7 +89,7 @@ export default function HomeScreen() {
   );
 }
 
-HomeScreen.navigationOptions = {
+ContactsScreen.navigationOptions = {
   header: null,
 };
 
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 50,
   },
-  homeScreenFilename: {
+  ContactsScreenFilename: {
     marginVertical: 7,
   },
   codeHighlightText: {

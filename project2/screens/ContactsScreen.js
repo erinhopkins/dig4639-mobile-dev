@@ -1,15 +1,16 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { CheckBox}  from 'react-native-elements';
+import { Icon }  from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
-	state ={todoList:[]}
+export default class ContactsScreen extends React.Component {
+	state = {contactsList:[]}
+
 	componentDidMount() {
-		fetch('http://plato.mrl.ai:8080/todo', {
+		fetch('http://plato.mrl.ai:8080/contacts', {
 			headers: {
 				"API": "hopkins"
 			}
@@ -17,30 +18,29 @@ export default class HomeScreen extends React.Component {
 		.then(res => res.json())
 		.then(body => {
 			console.log (body)
-			this.setState({todoList:body.todo})
+			this.setState({contactsList:body.contacts})
 		})
 	}
 
-	completeTask(position, state) {
-		//Implement completing the task on the server
-		fetch('http://plato.mrl.ai:8080/todo/setState', {
+// Delete contact
+	removeContact(position) {
+		fetch('http://plato.mrl.ai:8080/contacts/remove', {
 			method: "POST",
 			headers: {
 				"API": "hopkins",
 				"Content-Type": "application/json",
 				"Accept": "application/json"
 			},
-			body: JSON.stringify({position:position, status:true})
+			body: JSON.stringify({position:position})
 		})
 		.then(res => res.json())
 		.then(body => {
 			console.log (body)
-			if(body.updated != undefined) {
-				const currentList = [...this.state.todoList]
-				currentList[position].completed = state
-				this.setState({todoList: currentList})
+			if(body.removed != undefined) {
+				const currentList = this.state.contactsList.filter((v,i) =>
+					(i !== position))
+				this.setState({contactsList: currentList})
 			}
-			// this.setState({todoList:body.todo})
 		})
 	}
 
@@ -48,13 +48,15 @@ export default class HomeScreen extends React.Component {
 		return (
 			<View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>To Do</Text>
-				{this.state.todoList.map((item, index) =>
-				<View key={index} style={styles.todoView}>
-						<CheckBox
+				{this.state.contactsList.map((item, index) =>
+				<View key={index} style={styles.contactsView}>
+						<Text>{item.name} {item.completed ? "COMPLETED" : ""}</Text>
+						<Text>{item.number} {item.completed ? "COMPLETED" : ""}</Text>
+						<Icon
+								name='delete'
+								type='material'
             		checked={item.completed}
-            		onPress={() => this.completeTask(index, !item.completed)}/>
-					<Text>{index} : {item.text} {item.completed ? "COMPLETED" : ""}</Text>
+            		onPress={() => this.removeContact(index)}/>
 				</View>
 				)}
       </ScrollView>
@@ -63,7 +65,7 @@ export default class HomeScreen extends React.Component {
 	}
 }
 
-HomeScreen.navigationOptions = {
+ContactsScreen.navigationOptions = {
   header: null,
 };
 
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-	todoView: {
+	contactsView: {
     flex: 1,
 		flexDirection: 'row',
     backgroundColor: '#fff',
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 50,
   },
-  homeScreenFilename: {
+  ContactsScreenFilename: {
     marginVertical: 7,
   },
   codeHighlightText: {
