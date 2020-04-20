@@ -19,8 +19,6 @@ export default class AddContactsScreen extends React.Component {
 		fetch('http://plato.mrl.ai:8080/profile', {
 			headers: {
 				"API": 'hopkins',
-				"Content-Type": "application/json",
-				"Accept": "application/json"
 			}
 		})
 			.then(res => res.json())
@@ -48,21 +46,6 @@ export default class AddContactsScreen extends React.Component {
 	}
 }
 
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
-      </View>
-    </RectButton>
-  );
-}
 
 const styles = StyleSheet.create({
   labelText: {
