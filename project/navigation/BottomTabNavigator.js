@@ -4,6 +4,7 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import ContactsScreen from '../screens/ContactsScreen';
 import AddContactsScreen from '../screens/AddContactsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Contacts';
@@ -32,6 +33,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
         }}
       />
+			<BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-home" />,
+        }}
+      />
     </BottomTab.Navigator>
   );
 }
@@ -44,5 +53,7 @@ function getHeaderTitle(route) {
       return 'Contacts List';
     case 'Add':
       return 'Add Contact';
+	 case 'Profile':
+      return 'Profile';
   }
 }
