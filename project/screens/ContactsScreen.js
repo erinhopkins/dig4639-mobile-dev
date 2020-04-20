@@ -1,28 +1,44 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { Icon }  from 'react-native-elements';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Icon, Button }  from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
-
-import { MonoText } from '../components/StyledText';
 
 export default class ContactsScreen extends React.Component {
 	state = {contactsList:[]}
+	focusListener = undefined;
+	constructor(props) {
+		super(props)
+		this.focusListener = props.navigation.addListener('focus',
+			() => this.componentGainsFocus())
+	}
 
-	componentDidMount() {
+updateContactsList() {
 		fetch('http://plato.mrl.ai:8080/contacts', {
 			headers: {
 				"API": "hopkins"
 			}
-		})
+	})
 		.then(res => res.json())
 		.then(body => {
-			console.log (body)
+			console.log(body)
 			this.setState({contactsList:body.contacts})
 		})
 	}
 
-// Delete contact
+	componentGainsFocus() {
+		console.log("Has focus")
+		this.updateContactsList()
+	}
+
+	componentWillUnmount() {
+		this.props.navigation.removeLisenter('focus', this.componentGainsFocus)
+	}
+
+	componentDidMount() {
+		this.updateContactsList()
+	}
+
 	removeContact(position) {
 		fetch('http://plato.mrl.ai:8080/contacts/remove', {
 			method: "POST",
@@ -35,12 +51,13 @@ export default class ContactsScreen extends React.Component {
 		})
 		.then(res => res.json())
 		.then(body => {
-			console.log (body)
+			console.log(body)
 			if(body.removed != undefined) {
 				const currentList = this.state.contactsList.filter((v,i) =>
 					(i !== position))
 				this.setState({contactsList: currentList})
 			}
+			// this.setState({todoList:body.todo})
 		})
 	}
 
@@ -59,6 +76,10 @@ export default class ContactsScreen extends React.Component {
             		onPress={() => this.removeContact(index)}/>
 				</View>
 				)}
+				<Button
+					title="Add Contact"
+					onPress={() => this.props.navigation.navigate('Add')}>
+				</Button>
       </ScrollView>
     </View>
   	);

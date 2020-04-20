@@ -1,28 +1,68 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } from 'react-native';
-import { CheckBox}  from 'react-native-elements';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import { CheckBox, Button, Card }  from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { MonoText } from '../components/StyledText';
-
 export default class TodoScreen extends React.Component {
-	state ={todoList:[]}
-	componentDidMount() {
+	state = {todoList:[]}
+	focusListener = undefined;
+	constructor(props) {
+		super(props)
+		this.focusListener = props.navigation.addListener('focus',
+			() => this.componentGainsFocus())
+	}
+
+	updateTaskList() {
 		fetch('http://plato.mrl.ai:8080/todo', {
 			headers: {
 				"API": "hopkins"
 			}
-		})
+	})
 		.then(res => res.json())
 		.then(body => {
-			console.log (body)
+			console.log(body)
 			this.setState({todoList:body.todo})
 		})
 	}
 
+	componentGainsFocus() {
+		console.log("Has focus")
+		this.updateTaskList()
+	}
+
+	componentWillUnmount() {
+		this.props.navigation.removeLisenter('focus', this.componentGainsFocus)
+	}
+
+	componentDidMount() {
+		this.updateTaskList()
+	}
+
+	removeTask(position) {
+		fetch('http://plato.mrl.ai:8080/todo/remove', {
+			method: "POST",
+			headers: {
+				"API": "hopkins",
+				"Content-Type": "application/json",
+				"Accept": "application/json"
+			},
+			body: JSON.stringify({position:position})
+		})
+		.then(res => res.json())
+		.then(body => {
+			console.log(body)
+			if(body.removed != undefined) {
+				const currentList = this.state.todoList.filter((v,i) =>
+					(i !== position))
+				this.setState({todoList: currentList})
+			}
+			// this.setState({todoList:body.todo})
+		})
+	}
+
+	//Implement completing the task on the server
 	completeTask(position, state) {
-		//Implement completing the task on the server
 		fetch('http://plato.mrl.ai:8080/todo/setState', {
 			method: "POST",
 			headers: {
@@ -34,7 +74,7 @@ export default class TodoScreen extends React.Component {
 		})
 		.then(res => res.json())
 		.then(body => {
-			console.log (body)
+			console.log(body)
 			if(body.updated != undefined) {
 				const currentList = [...this.state.todoList]
 				currentList[position].completed = state
@@ -53,9 +93,16 @@ export default class TodoScreen extends React.Component {
 						<CheckBox
             		checked={item.completed}
             		onPress={() => this.completeTask(index, !item.completed)}/>
-					<Text>{index} : {item.text} {item.completed ? "COMPLETED" : ""}</Text>
+					<Text>{item.text} {item.completed}</Text>
+					<View style={{position: 'absolute', right:0}}>
+						<Button title="X" onPress={() => this.removeTask(index)}></Button>
+					</View>
 				</View>
 				)}
+				<Button
+					title="Add Task"
+					onPress={() => this.props.navigation.navigate('Add')}>
+				</Button>
       </ScrollView>
     </View>
   	);

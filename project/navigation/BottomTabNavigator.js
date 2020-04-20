@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import ContactsScreen from '../screens/ContactsScreen';
-import LinksScreen from '../screens/AddContactScreen';
+import AddContactsScreen from '../screens/AddContactsScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Contacts';
@@ -25,10 +25,10 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Add Contact"
-        component={AddContactScreen}
+        name="Add"
+        component={AddContactsScreen}
         options={{
-          title: 'Add Contact',
+          title: 'Add',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
         }}
       />

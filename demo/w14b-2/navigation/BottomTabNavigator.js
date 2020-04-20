@@ -25,8 +25,8 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Add Task"
-        component={LinksScreen}
+        name="Add"
+        component={AddTaskScreen}
         options={{
           title: 'Add',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
