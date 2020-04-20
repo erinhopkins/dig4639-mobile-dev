@@ -2,8 +2,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/TodoScreen';
-import LinksScreen from '../screens/LinksScreen';
+import TodoScreen from '../screens/TodoScreen';
+import AddTaskScreen from '../screens/AddTaskScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Todo';
@@ -18,7 +18,7 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
         name="Todo"
-        component={HomeScreen}
+        component={TodoScreen}
         options={{
           title: 'Todo List',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-list" />,

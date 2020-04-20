@@ -6,7 +6,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
+export default class TodoScreen extends React.Component {
 	state ={todoList:[]}
 	componentDidMount() {
 		fetch('http://plato.mrl.ai:8080/todo', {
@@ -48,7 +48,6 @@ export default class HomeScreen extends React.Component {
 		return (
 			<View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <Text>To Do</Text>
 				{this.state.todoList.map((item, index) =>
 				<View key={index} style={styles.todoView}>
 						<CheckBox
@@ -63,7 +62,7 @@ export default class HomeScreen extends React.Component {
 	}
 }
 
-HomeScreen.navigationOptions = {
+TodoScreen.navigationOptions = {
   header: null,
 };
 
