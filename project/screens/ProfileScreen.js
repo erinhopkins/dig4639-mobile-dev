@@ -1,12 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
-import { Input, Button } from 'react-native-elements';
-import { MonoText } from '../components/StyledText';
+import { Button } from 'react-native-elements';
 
-export default class AddContactsScreen extends React.Component {
+export default class ProfileScreen extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -30,57 +26,45 @@ export default class AddContactsScreen extends React.Component {
 
 	render() {
 		return (
-			<ScrollView>
-				<Text>Welcome {this.state.userName}!</Text>
-				<Text>You have {this.state.userNum} contacts</Text>
-			<Button
-				title="View Contacts"
-				onPress={() => this.props.navigation.navigate('Contacts')}>
-			</Button>
-			<Button
-					title="Add Contact"
-					onPress={() => this.props.navigation.navigate('Add')}>
+			<View style={styles.container}>
+				<Text style={styles.welcome}>Welcome {this.state.	userName}!</Text>
+				<Text style={styles.text}>You have {this.state.userNum} contacts</Text>
+				<Button
+					title="View Contacts"
+					onPress={() => this.props.navigation.navigate('Contacts')}
+					buttonStyle={styles.button}>
 				</Button>
-    	</ScrollView>
+				<Button
+						title="Add Contact"
+						onPress={() => this.props.navigation.navigate('Add')}
+						buttonStyle={styles.button}>
+					</Button>
+    		</View>
 		);
 	}
 }
 
 
 const styles = StyleSheet.create({
-  labelText: {
-		textAlignVertical: 'center',
+  container: {
+    flex: 1,
+		padding: 10,
+		backgroundColor: '#b2eee6',
+  },
+	welcome: {
+		fontSize: 25,
+		fontWeight: 'bold',
+		paddingTop: 10,
 		textAlign: 'center'
 	},
-	container: {
-    flex: 1,
-    backgroundColor: '#fafafa',
-  },
-	priorityRow: {
-    flex: 1,
-		flexDirection: 'row',
-    backgroundColor: '#fafafa',
-  },
-  contentContainer: {
-    paddingTop: 15,
-  },
-  optionIconContainer: {
-    marginRight: 12,
-  },
-  option: {
-    backgroundColor: '#fdfdfd',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: 0,
-    borderColor: '#ededed',
-  },
-  lastOption: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  optionText: {
-    fontSize: 15,
-    alignSelf: 'flex-start',
-    marginTop: 1,
-  },
+	text: {
+		fontSize: 20,
+		paddingTop: 5,
+		paddingBottom: 10,
+		textAlign: 'center'
+	},
+	button: {
+			backgroundColor: '#28336b',
+			marginTop: 15
+	},
 });

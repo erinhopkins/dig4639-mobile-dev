@@ -70,8 +70,10 @@ export default class AddTaskScreen extends React.Component {
 
 	render() {
 		return (
-			<ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <Input placeholder="e.g. Complete Final Project for DIG4639"
+			<ScrollView
+				style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <Input
+				placeholder="e.g. Complete Final Project for DIG4639"
 				onChangeText={text => this.handleTextInput(text)} />
 			<View style={styles.priorityRow}>
 				<Text style={styles.labelText}>Priority:</Text>
@@ -83,8 +85,6 @@ export default class AddTaskScreen extends React.Component {
 						onPress={(value) => {this.setState({taskPriority:value})}}
 					/>
 			</View>
-			{/* <Input placeholder="Priority Level"
-				onChangeText={text => this.handlePriorityInput(text)} /> */}
 			<Button title="Create Task"
 				disabled = {this.state.submitDisabled}
 				onPress={() => this.handleCreatedTask()}/>
@@ -93,21 +93,6 @@ export default class AddTaskScreen extends React.Component {
 	}
 }
 
-
-function OptionButton({ icon, label, onPress, isLastOption }) {
-  return (
-    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={styles.optionIconContainer}>
-          <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
-        </View>
-        <View style={styles.optionTextContainer}>
-          <Text style={styles.optionText}>{label}</Text>
-        </View>
-      </View>
-    </RectButton>
-  );
-}
 
 const styles = StyleSheet.create({
   labelText: {

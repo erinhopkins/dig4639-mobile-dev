@@ -76,16 +76,16 @@ export default class AddContactsScreen extends React.Component {
 		return (
 			<View style={styles.container}>
 				<ScrollView>
-					<Text>Name:</Text>
+					<Text style={styles.text}>Name:</Text>
 					<Input
 						placeholder="John Doe"
-						onChangeText={text => this.handleNameInput(text)}>
-					</Input>
-					<Text>Number:</Text>
+						onChangeText={text => this.handleNameInput(text)}
+						style={styles.input} />
+					<Text style={styles.text}>Number:</Text>
 					<Input
 						placeholder="123-456-7890"
-						onChangeText={text => this.handleNumberInput(text)}>
-					</Input>
+						onChangeText={text => this.handleNumberInput(text)}
+						style={styles.input} />
 				<Button title="Add Contact"
 					disabled = {this.state.submitDisabled}
 					onPress={() => this.handleCreatedContact()}
@@ -103,10 +103,14 @@ const styles = StyleSheet.create({
 		padding: 10,
 		backgroundColor: '#b2eee6'
   },
-
 	button: {
     backgroundColor: '#28336b',
 		marginTop: 20
-	}
-
+	},
+	text: {
+		fontSize: 20,
+		paddingTop: 15,
+		color: '#28336b',
+		fontWeight: 'bold'
+	},
 });

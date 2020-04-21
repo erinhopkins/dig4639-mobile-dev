@@ -5,6 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import ContactsScreen from '../screens/ContactsScreen';
 import AddContactsScreen from '../screens/AddContactsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import TabBarLabel from  '../components/TabBarLabel'
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Contacts';
@@ -21,8 +22,9 @@ export default function BottomTabNavigator({ navigation, route }) {
         name="Contacts"
         component={ContactsScreen}
         options={{
-          title: 'Contacts List',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-contact" />,
+          title: 'Contacts',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-contact"/>,
+					tabBarLabel: ({ focused }) => <TabBarLabel focused={focused} title={'Contacts'}/>
         }}
       />
       <BottomTab.Screen
@@ -31,6 +33,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'Add',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
+					tabBarLabel: ({ focused }) => <TabBarLabel focused={focused} title={'Add'}/>
         }}
       />
 			<BottomTab.Screen
@@ -39,6 +42,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'Profile',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-home" />,
+					tabBarLabel: ({ focused }) => <TabBarLabel focused={focused} title={'Profile'}/>
         }}
       />
     </BottomTab.Navigator>
@@ -54,6 +58,6 @@ function getHeaderTitle(route) {
     case 'Add':
       return 'Add Contact';
 	 case 'Profile':
-      return 'Profile';
+      return 'View Profile';
   }
 }

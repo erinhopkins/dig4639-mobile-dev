@@ -1,4 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Icon, Button, Card }  from 'react-native-elements';
@@ -39,7 +38,7 @@ updateContactsList() {
 		this.updateContactsList()
 	}
 
-	remove(position) {
+	removeContact(position) {
 		fetch('http://plato.mrl.ai:8080/contacts/remove', {
 			method: "POST",
 			headers: {
@@ -64,30 +63,34 @@ updateContactsList() {
   render() {
 		return (
 			<View style={styles.container}>
+				<View>
+					<Button
+						title="Add Contact"
+						onPress={() => this.props.navigation.navigate('Add')}
+						buttonStyle={styles.button}>
+					</Button>
+				</View>
       <ScrollView
 				style={styles.container}
 				contentContainerStyle={styles.contentContainer}>
 				{this.state.contactsList.map((item, index) =>
+			<View key={index} styles={styles.contactsView}>
 				<Card
-					key={index}
-					style={styles.contactsView}
 					style={styles.card}>
 						<Text>{item.name}</Text>
 						<Text>{item.number}</Text>
+					<View style={{position: 'absolute', right:0}}>
 						<Icon
 								name='delete'
 								type='material'
             		checked={item.completed}
             		onPress={() => this.removeContact(index)}
 								/>
+						</View>
 				</Card>
+			</View>
 				)}
-				<Button
-					title="Add Contact"
-					onPress={() => this.props.navigation.navigate('Add')}
-					buttonStyle={styles.button}>
-				</Button>
-      </ScrollView>
+			</ScrollView>
     </View>
   	);
 	}
@@ -99,16 +102,18 @@ ContactsScreen.navigationOptions = {
 
 
 const styles = StyleSheet.create({
-  	container: {
+  container: {
     flex: 1,
 		padding: 10,
-		backgroundColor: '#b2eee6'
+		backgroundColor: '#b2eee6',
   },
-	button: {
-    backgroundColor: '#28336b',
-		marginTop: 20
+	priorityRow: {
+			flex: 1,
+			flexDirection: 'row',
+			backgroundColor: '#fafafa',
+		},
+		button: {
+			backgroundColor: '#28336b',
+			marginTop: 20
 	},
-	card: {
-		
-	}
 });
